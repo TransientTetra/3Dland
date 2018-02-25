@@ -1,5 +1,8 @@
 #include "lib.h"
 
+// #ifndef STB_IMAGE_IMPLEMENTATION
+// #define STB_IMAGE_IMPLEMENTATION
+// #include "stb_image.h"
+// #endif
+
 #include "application.h"
-#include "model.h"
-#include "renderer.h"
