@@ -44,7 +44,10 @@ void Application::clearDisplay(float r, float g, float b)
 	glClear(GL_COLOR_BUFFER_BIT);
 }
 
-void Application::applicationPollEvents(SDL_Event &event)
+void Application::applicationPollEvents(SDL_Event &event,
+		float &deltaMoveSideways, float &deltaMoveForward,
+		float &deltaMoveVertically,
+		float &deltaPitch, float &deltaRotation)
 {	
 	while(SDL_PollEvent(&event))
 	{
@@ -54,18 +57,69 @@ void Application::applicationPollEvents(SDL_Event &event)
 				quit = true;
 				break;
 			case SDL_KEYDOWN:
+				if (event.key.repeat == 0)
+				{
+					switch(event.key.keysym.sym)
+					{
+						case SDLK_ESCAPE:
+							quit = true;
+							break;
+						case SDLK_w:
+							deltaMoveForward = 0.05f;
+							break;
+						case SDLK_s:
+							deltaMoveForward = -0.05f;
+							break;
+						case SDLK_a:
+							deltaMoveSideways = 0.05f;
+							break;
+						case SDLK_d:
+							deltaMoveSideways = -0.05f;
+							break;
+						case SDLK_SPACE:
+							deltaMoveVertically = 0.05f;
+							break;
+						case SDLK_LCTRL:
+							deltaMoveVertically = -0.05f;
+							break;
+						case SDLK_DOWN:
+							deltaPitch = 0.02f;
+							break;
+						case SDLK_UP:
+							if (deltaPitch > -0.5f)
+								deltaPitch = -0.02f;
+							break;
+						case SDLK_LEFT:
+							deltaRotation = 0.02f;
+							break;
+						case SDLK_RIGHT:
+							deltaRotation = -0.02f;
+							break;
+					}
+				}
+				break;
+			case SDL_KEYUP:
 				switch(event.key.keysym.sym)
 				{
-					case SDLK_ESCAPE:
-						quit = true;
+					case SDLK_w:
+					case SDLK_s:
+						deltaMoveForward = 0;
+						break;
+					case SDLK_d:
+					case SDLK_a:
+						deltaMoveSideways = 0;
+						break;
+					case SDLK_SPACE:
+					case SDLK_LCTRL:
+						deltaMoveVertically = 0;
 						break;
 					case SDLK_UP:
-						break;
 					case SDLK_DOWN:
+						deltaPitch = 0;
 						break;
 					case SDLK_LEFT:
-						break;
 					case SDLK_RIGHT:
+						deltaRotation = 0;
 						break;
 				}
 		}
@@ -125,12 +179,21 @@ void Application::run()
 	Transform transform;
 	Camera camera(glm::vec3(0, 0, -3), 70.0f, (float)getWindowWidth()/(float)getWindowHeight(), 0.01f, 1000.0f);
 
-	float counter = 0.0f;
+	float deltaMoveSideways = 0.0f;
+	float deltaMoveForward = 0.0f;
+	float deltaMoveVertically = 0.0f;
+	float deltaPitch = 0.0f;
+	float deltaRotation = 0;
+
 	while (!quit)
 	{
 		clearDisplay(0.0f, 0.0f, 0.0f);
 
-		transform.setRotation(glm::vec3((0.5 * counter), 0.5 * counter, 0.5 * counter));
+		camera.moveForward(deltaMoveForward);
+		camera.moveSideways(deltaMoveSideways);
+		camera.moveVertically(deltaMoveVertically);
+		camera.pitch(deltaPitch);
+		camera.rotateY(deltaRotation);
 
 		shader.bind();
 		shader.update(transform, camera);
@@ -138,7 +201,7 @@ void Application::run()
 		mesh.draw();
 
 		SDL_GL_SwapWindow(m_window);
-		applicationPollEvents(event);
-		counter += 0.1f;
+		applicationPollEvents(event, deltaMoveSideways, deltaMoveForward, deltaMoveVertically, deltaPitch, deltaRotation);
+
 	}
 }

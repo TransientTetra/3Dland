@@ -23,6 +23,9 @@ public:
 
 	unsigned int getWindowWidth(){return m_windowWidth;}
 	unsigned int getWindowHeight(){return m_windowHeight;}
-	void applicationPollEvents(SDL_Event &event);
+	void applicationPollEvents(SDL_Event &event,
+		float &deltaMoveSideways, float &deltaMoveForward,
+		float &deltaMoveVertically,
+		float &deltaPitch, float &deltaRotation);
 };
 #endif
