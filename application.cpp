@@ -1,6 +1,7 @@
 #include "header.h"
 
 Application::Application(int width, int height, const std::string &title)
+: m_windowWidth(width), m_windowHeight(height)
 {	
 	SDL_Init(SDL_INIT_EVERYTHING);
 
