@@ -1,6 +1,11 @@
 #ifndef APPLICATION_H
 #define APPLICATION_H
 #include "header.h"
+#include "shader.h"
+#include "camera.h"
+#include "mesh.h"
+#include "transform.h"
+#include "texture.h"
 class Application
 {
 private:
@@ -18,5 +23,6 @@ public:
 
 	unsigned int getWindowWidth(){return m_windowWidth;}
 	unsigned int getWindowHeight(){return m_windowHeight;}
+	void applicationPollEvents(SDL_Event &event);
 };
 #endif

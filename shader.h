@@ -1,6 +1,8 @@
 #ifndef SHADER_H
 #define SHADER_H
 #include "header.h"
+#include "camera.h"
+#include "transform.h"
 class Shader
 {
 private:

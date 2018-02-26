@@ -1,4 +1,4 @@
-#include "header.h"
+#include "shader.h"
 
 
 Shader::Shader(const std::string &fileName)

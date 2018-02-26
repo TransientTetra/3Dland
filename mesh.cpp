@@ -1,4 +1,4 @@
-#include "header.h"
+#include "mesh.h"
 
 Mesh::Mesh(Vertex *vertices, unsigned int numVertices)
 {
@@ -44,6 +44,7 @@ Mesh::~Mesh()
 void Mesh::draw()
 {
 	glBindVertexArray(vaoID);
+	glClear(GL_DEPTH_BUFFER_BIT);
 
 	glDrawArrays(GL_TRIANGLES, 0, drawCount);
 

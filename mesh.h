@@ -13,7 +13,6 @@ public:
 		m_position = position;
 		m_texCoord = texCoord;
 	}
-	~Vertex();
 	
 	glm::vec3 *getPosition(){return &m_position;}
 	glm::vec2 *getTexCoord(){return &m_texCoord;}

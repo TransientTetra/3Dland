@@ -1,4 +1,4 @@
-#include "header.h"
+#include "texture.h"
 
 #ifndef STB_IMAGE_IMPLEMENTATION
 #define STB_IMAGE_IMPLEMENTATION
