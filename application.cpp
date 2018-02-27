@@ -47,14 +47,26 @@ void Application::clearDisplay(float r, float g, float b)
 void Application::applicationPollEvents(SDL_Event &event,
 		float &deltaMoveSideways, float &deltaMoveForward,
 		float &deltaMoveVertically,
-		float &deltaPitch, float &deltaRotation)
+		Camera &camera)
 {	
+	SDL_SetRelativeMouseMode(SDL_TRUE);
 	while(SDL_PollEvent(&event))
 	{
 		switch(event.type)
 		{
 			case SDL_QUIT:
 				quit = true;
+				break;
+			case SDL_MOUSEMOTION:
+				if (event.motion.xrel)
+				{
+					camera.rotateY(-0.005f * event.motion.xrel);
+				}
+				if (event.motion.yrel)
+				{
+					// if (camera.getVerticalAngle() > -1.0f)
+							camera.pitch(0.005f * event.motion.yrel);
+				}
 				break;
 			case SDL_KEYDOWN:
 				if (event.key.repeat == 0)
@@ -82,19 +94,6 @@ void Application::applicationPollEvents(SDL_Event &event,
 						case SDLK_LCTRL:
 							deltaMoveVertically = -0.05f;
 							break;
-						case SDLK_DOWN:
-							deltaPitch = 0.02f;
-							break;
-						case SDLK_UP:
-							if (deltaPitch > -0.5f)
-								deltaPitch = -0.02f;
-							break;
-						case SDLK_LEFT:
-							deltaRotation = 0.02f;
-							break;
-						case SDLK_RIGHT:
-							deltaRotation = -0.02f;
-							break;
 					}
 				}
 				break;
@@ -112,14 +111,6 @@ void Application::applicationPollEvents(SDL_Event &event,
 					case SDLK_SPACE:
 					case SDLK_LCTRL:
 						deltaMoveVertically = 0;
-						break;
-					case SDLK_UP:
-					case SDLK_DOWN:
-						deltaPitch = 0;
-						break;
-					case SDLK_LEFT:
-					case SDLK_RIGHT:
-						deltaRotation = 0;
 						break;
 				}
 		}
@@ -182,8 +173,6 @@ void Application::run()
 	float deltaMoveSideways = 0.0f;
 	float deltaMoveForward = 0.0f;
 	float deltaMoveVertically = 0.0f;
-	float deltaPitch = 0.0f;
-	float deltaRotation = 0;
 
 	while (!quit)
 	{
@@ -192,8 +181,6 @@ void Application::run()
 		camera.moveForward(deltaMoveForward);
 		camera.moveSideways(deltaMoveSideways);
 		camera.moveVertically(deltaMoveVertically);
-		camera.pitch(deltaPitch);
-		camera.rotateY(deltaRotation);
 
 		shader.bind();
 		shader.update(transform, camera);
@@ -201,7 +188,7 @@ void Application::run()
 		mesh.draw();
 
 		SDL_GL_SwapWindow(m_window);
-		applicationPollEvents(event, deltaMoveSideways, deltaMoveForward, deltaMoveVertically, deltaPitch, deltaRotation);
+		applicationPollEvents(event, deltaMoveSideways, deltaMoveForward, deltaMoveVertically, camera);
 
 	}
 }

@@ -55,6 +55,8 @@ public:
 		m_up = glm::vec3(glm::normalize(rotation * glm::vec4(m_up, 0.0)));
 	}
 
+	float getVerticalAngle(){return m_verticalAngle;}
+
 
 	glm::mat4 getViewProjection() const
 	{

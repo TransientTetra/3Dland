@@ -26,6 +26,6 @@ public:
 	void applicationPollEvents(SDL_Event &event,
 		float &deltaMoveSideways, float &deltaMoveForward,
 		float &deltaMoveVertically,
-		float &deltaPitch, float &deltaRotation);
+		Camera &camera);
 };
 #endif
